@@ -1,0 +1,35 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- ASP.NET / EF Core -->
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0-preview.4.25258.110" />
+    <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.0-preview.4.25258.110" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.0-preview.4.25258.110" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0-preview.4.25258.110" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.0-preview.4.25258.110" />
+    <!-- Logging -->
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.14.1" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageVersion Include="Serilog.Sinks.File" Version="6.0.0" />
+    <!-- Validation -->
+    <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <!-- SignalR (included in ASP.NET, listed for awareness) -->
+    <!-- OpenAPI / Swagger -->
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="10.0.6" />
+    <!-- Mapping -->
+    <PackageVersion Include="AutoMapper" Version="13.0.1" />
+    <PackageVersion Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <!-- Rate limiting (built-in, no package needed for .NET 8) -->
+    <!-- Test -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+    <PackageVersion Include="Moq" Version="4.20.72" />
+    <PackageVersion Include="FluentAssertions" Version="6.12.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="10.0.0-preview.4.25258.110" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
+  </ItemGroup>
+</Project>

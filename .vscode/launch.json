@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "API (https)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build: dotnet",
+      "program": "${workspaceFolder}/src/api/TCG.FreightBroker.Api/bin/Debug/net10.0/TCG.FreightBroker.Api.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/src/api/TCG.FreightBroker.Api",
+      "stopAtEntry": false,
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "https://localhost:5001;http://localhost:5000"
+      },
+      "sourceFileMap": {
+        "/Views": "${workspaceFolder}/Views"
+      }
+    }
+  ]
+}

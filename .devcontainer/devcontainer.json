@@ -1,0 +1,39 @@
+{
+  "name": "TCG Freight Broker",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "mounts": [
+    "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+  ],
+  "forwardPorts": [5001, 5173, 1433],
+  "portsAttributes": {
+    "5001": { "label": "API (HTTPS)" },
+    "5173": { "label": "Vite Dev Server" },
+    "1433": { "label": "SQL Server" }
+  },
+  "postCreateCommand": "dotnet restore && pnpm install",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "bradlc.vscode-tailwindcss",
+        "ms-mssql.mssql"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[csharp]": {
+          "editor.defaultFormatter": "ms-dotnettools.csharp"
+        }
+      }
+    }
+  }
+}

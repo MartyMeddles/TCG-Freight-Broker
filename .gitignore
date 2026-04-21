@@ -1,0 +1,39 @@
+# Build outputs
+bin/
+obj/
+dist/
+out/
+.next/
+.nuxt/
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# IDE & OS
+.vs/
+.idea/
+*.user
+.DS_Store
+Thumbs.db
+
+# Environment secrets
+.env
+.env.local
+.env.*.local
+
+# Test results & coverage
+TestResults/
+coverage/
+*.trx
+*.opencover.xml
+
+# EF Core migrations (keep the Migrations folder, ignore snapshots that conflict)
+# (intentionally not ignored — we track migrations)
+
+# Docker volumes (local)
+.docker/
+
+# Logs
+logs/
+*.log

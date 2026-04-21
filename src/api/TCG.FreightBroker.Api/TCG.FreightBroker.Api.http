@@ -1,0 +1,6 @@
+@TCG.FreightBroker.Api_HostAddress = http://localhost:5239
+
+GET {{TCG.FreightBroker.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
