@@ -49,7 +49,9 @@ public partial class LoadsController : ControllerBase
         var total = await query.CountAsync(cancellationToken);
         var items = await query.OrderByDescending(l => l.PickupDate).Skip((page - 1) * pageSize).Take(pageSize)
             .Select(l => new LoadDto(l.Id, l.LaneId, l.ReferenceNumber, l.PickupDate, l.DeliveryDate,
-                l.CarrierCost, l.TargetRate, l.BookedRate, l.Status, l.IsAutoBooked, l.CreatedAt))
+                l.CarrierCost, l.TargetRate, l.BookedRate, l.Status, l.IsAutoBooked, l.AiRecommendation, l.CreatedAt,
+                l.Lane.OriginCity + " → " + l.Lane.DestinationCity,
+                l.Lane.Client != null ? l.Lane.Client.Name : null))
             .ToListAsync(cancellationToken);
         return Ok(ApiResult<PagedResult<LoadDto>>.Ok(new PagedResult<LoadDto> { Items = items, Page = page, PageSize = pageSize, TotalCount = total }));
     }
@@ -57,11 +59,15 @@ public partial class LoadsController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<ApiResult<LoadDto>>> GetById(int id, CancellationToken cancellationToken)
     {
-        var load = await _db.Loads.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+        var load = await _db.Loads.AsNoTracking()
+            .Include(l => l.Lane).ThenInclude(l => l.Client)
+            .FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
         if (load is null) return NotFound(ApiResult<LoadDto>.Fail("Load not found."));
         return Ok(ApiResult<LoadDto>.Ok(new LoadDto(load.Id, load.LaneId, load.ReferenceNumber,
             load.PickupDate, load.DeliveryDate, load.CarrierCost, load.TargetRate, load.BookedRate,
-            load.Status, load.IsAutoBooked, load.CreatedAt)));
+            load.Status, load.IsAutoBooked, load.AiRecommendation, load.CreatedAt,
+            $"{load.Lane.OriginCity} → {load.Lane.DestinationCity}",
+            load.Lane.Client?.Name)));
     }
 
     [HttpPost]
@@ -80,8 +86,12 @@ public partial class LoadsController : ControllerBase
         };
         _db.Loads.Add(load);
         await _db.SaveChangesAsync(cancellationToken);
+        await _db.Entry(load).Reference(l => l.Lane).LoadAsync(cancellationToken);
+        await _db.Entry(load.Lane).Reference(l => l.Client).LoadAsync(cancellationToken);
         var dto = new LoadDto(load.Id, load.LaneId, load.ReferenceNumber, load.PickupDate, load.DeliveryDate,
-            load.CarrierCost, load.TargetRate, load.BookedRate, load.Status, load.IsAutoBooked, load.CreatedAt);
+            load.CarrierCost, load.TargetRate, load.BookedRate, load.Status, load.IsAutoBooked,
+            load.AiRecommendation, load.CreatedAt,
+            $"{load.Lane?.OriginCity} → {load.Lane?.DestinationCity}", load.Lane?.Client?.Name);
         return CreatedAtAction(nameof(GetById), new { id = load.Id }, ApiResult<LoadDto>.Ok(dto));
     }
 
@@ -149,6 +159,7 @@ public partial class LoadsController : ControllerBase
 
         return Ok(ApiResult<LoadDto>.Ok(new LoadDto(load.Id, load.LaneId, load.ReferenceNumber,
             load.PickupDate, load.DeliveryDate, load.CarrierCost, load.TargetRate, load.BookedRate,
-            load.Status, load.IsAutoBooked, load.CreatedAt)));
+            load.Status, load.IsAutoBooked, load.AiRecommendation, load.CreatedAt,
+            $"{load.Lane.OriginCity} → {load.Lane.DestinationCity}", load.Lane.Client?.Name)));
     }
 }

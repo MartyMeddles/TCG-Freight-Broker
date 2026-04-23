@@ -24,7 +24,10 @@ export interface LoadDto {
   bookedRate: number | null;
   status: string;
   isAutoBooked: boolean;
+  aiRecommendation: string | null;
   createdAt: string;
+  laneName: string;
+  clientName: string | null;
 }
 
 export interface LaneDto {

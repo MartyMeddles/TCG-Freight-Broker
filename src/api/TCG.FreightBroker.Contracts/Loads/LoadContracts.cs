@@ -11,7 +11,10 @@ public record LoadDto(
     decimal? BookedRate,
     string Status,
     bool IsAutoBooked,
-    DateTimeOffset CreatedAt);
+    string? AiRecommendation,
+    DateTimeOffset CreatedAt,
+    string LaneName,
+    string? ClientName);
 
 public record CreateLoadRequest(
     int LaneId,

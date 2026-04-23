@@ -133,7 +133,7 @@ public sealed partial class AutoBookingHostedService : BackgroundService
                 bookedRate = input.CustomerRate;
                 break;
             default:
-                status = "PendingReview";
+                status = "Pending";
                 isAutoBooked = false;
                 bookedRate = null;
                 break;
@@ -142,6 +142,12 @@ public sealed partial class AutoBookingHostedService : BackgroundService
         load.Status = status;
         load.IsAutoBooked = isAutoBooked;
         load.BookedRate = bookedRate;
+        load.AiRecommendation = result.Recommendation switch
+        {
+            Recommendation.AutoAccept    => "Auto-Accept",
+            Recommendation.ContractBook  => "Contract-Book",
+            _                            => "Review",
+        };
 
         db.Loads.Add(load);
 

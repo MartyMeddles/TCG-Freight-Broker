@@ -11,6 +11,7 @@ public class Load
     public decimal TargetRate { get; set; }
     public decimal? BookedRate { get; set; }
     public string Status { get; set; } = "Pending"; // Pending, Accepted, Rejected, Booked
+    public string? AiRecommendation { get; set; }  // Auto-Accept, Contract-Book, Review
     public bool IsAutoBooked { get; set; }
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
 

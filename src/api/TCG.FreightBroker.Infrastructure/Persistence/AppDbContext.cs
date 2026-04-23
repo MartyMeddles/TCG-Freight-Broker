@@ -51,6 +51,7 @@ public class AppDbContext : DbContext
             e.Property(x => x.CarrierCost).HasColumnType("decimal(18,2)");
             e.Property(x => x.TargetRate).HasColumnType("decimal(18,2)");
             e.Property(x => x.BookedRate).HasColumnType("decimal(18,2)");
+            e.Property(x => x.AiRecommendation).HasMaxLength(50);
             e.Property(x => x.Status).HasMaxLength(20);
         });
 
