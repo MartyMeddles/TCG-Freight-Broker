@@ -37,3 +37,6 @@ coverage/
 # Logs
 logs/
 *.log
+
+# Local developer overrides (contain machine-specific connection strings and dev secrets)
+appsettings.Development.json

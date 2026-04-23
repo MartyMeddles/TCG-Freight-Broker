@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="..\TCG.FreightBroker.Domain\TCG.FreightBroker.Domain.csproj" />
     <ProjectReference Include="..\TCG.FreightBroker.Application\TCG.FreightBroker.Application.csproj" />
   </ItemGroup>
