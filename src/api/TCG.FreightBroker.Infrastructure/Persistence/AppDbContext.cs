@@ -48,6 +48,7 @@ public class AppDbContext : DbContext
         {
             e.HasKey(x => x.Id);
             e.HasOne(x => x.Lane).WithMany(x => x.Loads).HasForeignKey(x => x.LaneId);
+            e.Property(x => x.CarrierCost).HasColumnType("decimal(18,2)");
             e.Property(x => x.TargetRate).HasColumnType("decimal(18,2)");
             e.Property(x => x.BookedRate).HasColumnType("decimal(18,2)");
             e.Property(x => x.Status).HasMaxLength(20);

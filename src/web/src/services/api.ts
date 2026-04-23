@@ -19,6 +19,7 @@ export interface LoadDto {
   referenceNumber: string;
   pickupDate: string;
   deliveryDate: string;
+  carrierCost: number;
   targetRate: number;
   bookedRate: number | null;
   status: string;

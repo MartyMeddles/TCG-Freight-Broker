@@ -73,6 +73,7 @@ public sealed class LoadGenerator
             ReferenceNumber = $"LD-{seq + 1000:D4}",
             PickupDate = pickup,
             DeliveryDate = delivery,
+            CarrierCost = carrierCost,
             TargetRate = customerRate,
             Status = "Pending",
             IsAutoBooked = false,

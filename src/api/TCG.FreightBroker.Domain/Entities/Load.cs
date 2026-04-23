@@ -7,6 +7,7 @@ public class Load
     public string ReferenceNumber { get; set; } = string.Empty;
     public DateTimeOffset PickupDate { get; set; }
     public DateTimeOffset DeliveryDate { get; set; }
+    public decimal CarrierCost { get; set; }
     public decimal TargetRate { get; set; }
     public decimal? BookedRate { get; set; }
     public string Status { get; set; } = "Pending"; // Pending, Accepted, Rejected, Booked

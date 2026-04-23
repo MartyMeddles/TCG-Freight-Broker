@@ -6,6 +6,7 @@ public record LoadDto(
     string ReferenceNumber,
     DateTimeOffset PickupDate,
     DateTimeOffset DeliveryDate,
+    decimal CarrierCost,
     decimal TargetRate,
     decimal? BookedRate,
     string Status,

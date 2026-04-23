@@ -49,7 +49,7 @@ public partial class LoadsController : ControllerBase
         var total = await query.CountAsync(cancellationToken);
         var items = await query.OrderByDescending(l => l.PickupDate).Skip((page - 1) * pageSize).Take(pageSize)
             .Select(l => new LoadDto(l.Id, l.LaneId, l.ReferenceNumber, l.PickupDate, l.DeliveryDate,
-                l.TargetRate, l.BookedRate, l.Status, l.IsAutoBooked, l.CreatedAt))
+                l.CarrierCost, l.TargetRate, l.BookedRate, l.Status, l.IsAutoBooked, l.CreatedAt))
             .ToListAsync(cancellationToken);
         return Ok(ApiResult<PagedResult<LoadDto>>.Ok(new PagedResult<LoadDto> { Items = items, Page = page, PageSize = pageSize, TotalCount = total }));
     }
@@ -60,7 +60,7 @@ public partial class LoadsController : ControllerBase
         var load = await _db.Loads.AsNoTracking().FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
         if (load is null) return NotFound(ApiResult<LoadDto>.Fail("Load not found."));
         return Ok(ApiResult<LoadDto>.Ok(new LoadDto(load.Id, load.LaneId, load.ReferenceNumber,
-            load.PickupDate, load.DeliveryDate, load.TargetRate, load.BookedRate,
+            load.PickupDate, load.DeliveryDate, load.CarrierCost, load.TargetRate, load.BookedRate,
             load.Status, load.IsAutoBooked, load.CreatedAt)));
     }
 
@@ -81,7 +81,7 @@ public partial class LoadsController : ControllerBase
         _db.Loads.Add(load);
         await _db.SaveChangesAsync(cancellationToken);
         var dto = new LoadDto(load.Id, load.LaneId, load.ReferenceNumber, load.PickupDate, load.DeliveryDate,
-            load.TargetRate, load.BookedRate, load.Status, load.IsAutoBooked, load.CreatedAt);
+            load.CarrierCost, load.TargetRate, load.BookedRate, load.Status, load.IsAutoBooked, load.CreatedAt);
         return CreatedAtAction(nameof(GetById), new { id = load.Id }, ApiResult<LoadDto>.Ok(dto));
     }
 
@@ -148,7 +148,7 @@ public partial class LoadsController : ControllerBase
         }
 
         return Ok(ApiResult<LoadDto>.Ok(new LoadDto(load.Id, load.LaneId, load.ReferenceNumber,
-            load.PickupDate, load.DeliveryDate, load.TargetRate, load.BookedRate,
+            load.PickupDate, load.DeliveryDate, load.CarrierCost, load.TargetRate, load.BookedRate,
             load.Status, load.IsAutoBooked, load.CreatedAt)));
     }
 }

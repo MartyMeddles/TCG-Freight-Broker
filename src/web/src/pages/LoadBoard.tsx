@@ -15,6 +15,21 @@ function money(n: number | null | undefined) {
   return `$${Number(n).toLocaleString()}`;
 }
 
+function gp(targetRate: number, carrierCost: number): string {
+  if (!targetRate || !carrierCost) return '—';
+  const profit = targetRate - carrierCost;
+  const margin = (profit / targetRate) * 100;
+  return `$${profit.toLocaleString(undefined, { maximumFractionDigits: 0 })} (${margin.toFixed(1)}%)`;
+}
+
+function gpColor(targetRate: number, carrierCost: number): string {
+  if (!targetRate || !carrierCost) return '#6B7280';
+  const margin = (targetRate - carrierCost) / targetRate * 100;
+  if (margin >= 15) return '#16A34A';
+  if (margin >= 8) return '#D97706';
+  return '#DC2626';
+}
+
 function shortDate(iso: string) {
   return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
@@ -105,11 +120,11 @@ export default function LoadBoard() {
           <table className="w-full">
             <thead>
               <tr style={{ backgroundColor: '#F9FAFB', borderBottom: '1px solid #E5E7EB' }}>
-                {['Ref #', 'Lane', 'Pickup', 'Delivery', 'Target', 'Booked', 'Source', 'Status', 'Actions'].map((h, i) => (
+                {['Ref #', 'Lane', 'Pickup', 'Delivery', 'Carrier Cost', 'Target Rate', 'Gross Profit', 'Source', 'Status', 'Actions'].map((h, i) => (
                   <th
                     key={h}
                     className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider ${
-                      i >= 4 && i <= 6 ? 'text-right' : i === 7 || i === 8 ? 'text-center' : 'text-left'
+                      i >= 4 && i <= 6 ? 'text-right' : i === 7 || i === 8 || i === 9 ? 'text-center' : 'text-left'
                     }`}
                     style={{ color: '#6B7280' }}
                   >
@@ -121,7 +136,7 @@ export default function LoadBoard() {
             <tbody>
               {loads.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-12 text-center text-sm" style={{ color: '#9CA3AF' }}>
+                  <td colSpan={10} className="px-4 py-12 text-center text-sm" style={{ color: '#9CA3AF' }}>
                     No loads found
                   </td>
                 </tr>
@@ -140,8 +155,9 @@ export default function LoadBoard() {
                     <td className="px-4 py-3 text-sm" style={{ color: '#374151' }}>Lane #{l.laneId}</td>
                     <td className="px-4 py-3 text-sm font-mono text-right" style={{ color: '#6B7280' }}>{shortDate(l.pickupDate)}</td>
                     <td className="px-4 py-3 text-sm font-mono text-right" style={{ color: '#6B7280' }}>{shortDate(l.deliveryDate)}</td>
+                    <td className="px-4 py-3 text-sm font-mono text-right" style={{ color: '#6B7280' }}>{money(l.carrierCost)}</td>
                     <td className="px-4 py-3 text-sm font-mono text-right" style={{ color: '#1F2937' }}>{money(l.targetRate)}</td>
-                    <td className="px-4 py-3 text-sm font-mono text-right" style={{ color: '#16A34A' }}>{money(l.bookedRate)}</td>
+                    <td className="px-4 py-3 text-sm font-mono text-right font-semibold" style={{ color: gpColor(l.targetRate, l.carrierCost) }}>{gp(l.targetRate, l.carrierCost)}</td>
                     <td className="px-4 py-3 text-center">
                       {l.isAutoBooked ? (
                         <span
