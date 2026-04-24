@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<Lane> Lanes => Set<Lane>();
     public DbSet<Load> Loads => Set<Load>();
     public DbSet<Decision> Decisions => Set<Decision>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
     public DbSet<IntegrationConfig> IntegrationConfigs => Set<IntegrationConfig>();
 
@@ -78,6 +79,15 @@ public class AppDbContext : DbContext
             e.HasKey(x => x.Id);
             e.HasIndex(x => x.Key).IsUnique();
             e.Property(x => x.Key).HasMaxLength(100).IsRequired();
+        });
+
+        modelBuilder.Entity<AuditLog>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Action).HasMaxLength(100).IsRequired();
+            e.Property(x => x.EntityType).HasMaxLength(50);
+            e.Property(x => x.Username).HasMaxLength(100).IsRequired();
+            e.Property(x => x.Details).HasMaxLength(1000);
         });
     }
 }

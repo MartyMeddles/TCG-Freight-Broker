@@ -12,6 +12,7 @@ import Parameters from "./pages/Parameters";
 import Integrations from "./pages/Integrations";
 import Users from "./pages/Users";
 import ClientImport from "./pages/ClientImport";
+import AuditLog from "./pages/AuditLog";
 import Login from "./pages/Login";
 import { systemApi } from "./services/api";
 import { useLoadsHub } from "./hooks/useLoadsHub";
@@ -29,6 +30,7 @@ const ADMIN_TABS = [
   { label: "Integrations", path: "/integrations" },
   { label: "Users", path: "/users" },
   { label: "Client Import", path: "/import" },
+  { label: "Audit Log", path: "/audit" },
 ];
 
 function AppShell() {
@@ -157,6 +159,7 @@ function AppShell() {
           <Route path="integrations" element={<Integrations />} />
           <Route path="users" element={<Users />} />
           <Route path="import" element={<ClientImport />} />
+          <Route path="audit" element={<AuditLog />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>

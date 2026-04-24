@@ -93,6 +93,25 @@ export const lanesApi = {
   },
 };
 
+// ── Audit Logs ────────────────────────────────────────────────────────────────
+
+export interface AuditLogDto {
+  id: number;
+  action: string;
+  entityId: number | null;
+  entityType: string | null;
+  username: string;
+  details: string | null;
+  createdAt: string;
+}
+
+export const auditApi = {
+  getAll: async (params?: { page?: number; pageSize?: number; action?: string; username?: string }) => {
+    const { data } = await apiClient.get<ApiResult<PagedResult<AuditLogDto>>>('/auditlogs', { params });
+    return data.data!;
+  },
+};
+
 export const systemApi = {
   getAutoBookingStatus: async () => {
     const { data } = await apiClient.get<ApiResult<SystemStatus>>('/system/auto-booking');

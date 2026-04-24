@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using TCG.FreightBroker.Application.Integrations;
 using TCG.FreightBroker.Contracts.Common;
 using TCG.FreightBroker.Contracts.Loads;
@@ -134,6 +135,21 @@ public partial class LoadsController : ControllerBase
 
         load.Status = request.Status;
         if (request.BookedRate.HasValue) load.BookedRate = request.BookedRate;
+
+        // Write audit record
+        var username = User.FindFirstValue(ClaimTypes.Name)
+                       ?? User.FindFirstValue(ClaimTypes.NameIdentifier)
+                       ?? "unknown";
+        var auditAction = request.Status == "Accepted" ? "LOAD_ACCEPT" : request.Status == "Rejected" ? "LOAD_REJECT" : "LOAD_STATUS";
+        _db.AuditLogs.Add(new AuditLog
+        {
+            Action = auditAction,
+            EntityId = load.Id,
+            EntityType = "Load",
+            Username = username,
+            Details = $"{load.ReferenceNumber} — {load.Lane.OriginCity} → {load.Lane.DestinationCity} | Target ${load.TargetRate:F0} | Carrier ${load.CarrierCost:F0}",
+        });
+
         await _db.SaveChangesAsync(cancellationToken);
 
         // Push to e2open when a load is manually confirmed as Booked.

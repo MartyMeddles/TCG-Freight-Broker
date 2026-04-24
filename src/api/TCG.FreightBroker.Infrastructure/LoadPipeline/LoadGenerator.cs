@@ -14,6 +14,7 @@ namespace TCG.FreightBroker.Infrastructure.LoadPipeline;
 public sealed class LoadGenerator
 {
     private static int _sequence;
+    private static bool _seeded;
 
     /// <summary>
     /// Picks a random active lane and synthesises financial data.
@@ -25,6 +26,23 @@ public sealed class LoadGenerator
         IDatRateService datService,
         CancellationToken ct = default)
     {
+        // Seed the sequence counter from the DB max on first call after restart,
+        // so reference numbers never collide with existing rows.
+        if (!_seeded)
+        {
+            var maxRef = await db.Loads
+                .AsNoTracking()
+                .Where(l => l.ReferenceNumber.StartsWith("LD-"))
+                .Select(l => l.ReferenceNumber)
+                .OrderByDescending(l => l)
+                .FirstOrDefaultAsync(ct);
+
+            if (maxRef is not null && int.TryParse(maxRef.AsSpan(3), out int maxNum))
+                _sequence = maxNum - 1000;
+
+            _seeded = true;
+        }
+
         // Load active lanes, eager-load their client (null for spot lanes)
         var lanes = await db.Lanes
             .AsNoTracking()
