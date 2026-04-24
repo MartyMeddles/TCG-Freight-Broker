@@ -296,3 +296,42 @@ export const configApi = {
     return data.data!;
   },
 };
+
+// ── Integration Configs (custom/additional) ───────────────────────────────────
+
+export interface IntegrationConfigDto {
+  id: number;
+  name: string;
+  type: string;
+  baseUrl: string;
+  apiKeyMasked: string | null;
+  notes: string | null;
+  isActive: boolean;
+  createdAt: string;
+}
+
+export interface CreateIntegrationConfigRequest {
+  name: string;
+  type: string;
+  baseUrl?: string;
+  apiKey?: string;
+  notes?: string;
+}
+
+export const integrationConfigsApi = {
+  getAll: async () => {
+    const { data } = await apiClient.get<ApiResult<IntegrationConfigDto[]>>('/integration-configs');
+    return data.data!;
+  },
+  create: async (req: CreateIntegrationConfigRequest) => {
+    const { data } = await apiClient.post<ApiResult<IntegrationConfigDto>>('/integration-configs', req);
+    return data.data!;
+  },
+  toggle: async (id: number) => {
+    const { data } = await apiClient.patch<ApiResult<IntegrationConfigDto>>(`/integration-configs/${id}/toggle`);
+    return data.data!;
+  },
+  remove: async (id: number) => {
+    await apiClient.delete(`/integration-configs/${id}`);
+  },
+};

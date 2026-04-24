@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<Load> Loads => Set<Load>();
     public DbSet<Decision> Decisions => Set<Decision>();
     public DbSet<SystemSetting> SystemSettings => Set<SystemSetting>();
+    public DbSet<IntegrationConfig> IntegrationConfigs => Set<IntegrationConfig>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,6 +54,16 @@ public class AppDbContext : DbContext
             e.Property(x => x.BookedRate).HasColumnType("decimal(18,2)");
             e.Property(x => x.AiRecommendation).HasMaxLength(50);
             e.Property(x => x.Status).HasMaxLength(20);
+        });
+
+        modelBuilder.Entity<IntegrationConfig>(e =>
+        {
+            e.HasKey(x => x.Id);
+            e.Property(x => x.Name).HasMaxLength(200).IsRequired();
+            e.Property(x => x.Type).HasMaxLength(50).IsRequired();
+            e.Property(x => x.BaseUrl).HasMaxLength(500);
+            e.Property(x => x.ApiKey).HasMaxLength(500);
+            e.Property(x => x.Notes).HasMaxLength(1000);
         });
 
         modelBuilder.Entity<Decision>(e =>
