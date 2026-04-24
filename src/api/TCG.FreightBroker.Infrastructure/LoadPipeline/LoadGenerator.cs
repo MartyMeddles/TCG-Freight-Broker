@@ -46,13 +46,19 @@ public sealed class LoadGenerator
         decimal carrierCost = Math.Round(spotRate * rng.NextDecimal(0.78m, 0.96m), 2);
         bool isContract = lane.Client is not null;
 
+        // Contract lanes: customer rate is a fixed contract negotiated against spot.
+        // The contract rate is sometimes above, sometimes below current spot — 
+        // modelling real-world scenarios where spot moves against the contract.
+        // Range: 0.88–1.10 of spot → can produce thin or negative GP.
         decimal contractRate = isContract
-            ? Math.Round(spotRate * rng.NextDecimal(1.10m, 1.25m), 2)
+            ? Math.Round(spotRate * rng.NextDecimal(0.88m, 1.10m), 2)
             : 0m;
 
+        // Spot lanes: customer rate tracks spot closely with a small brokerage spread.
+        // Range: 0.98–1.08 of spot → typically thin positive GP.
         decimal customerRate = isContract
             ? contractRate
-            : Math.Round(spotRate * rng.NextDecimal(0.95m, 1.10m), 2);
+            : Math.Round(spotRate * rng.NextDecimal(0.98m, 1.08m), 2);
 
         decimal profit = customerRate - carrierCost;
         decimal margin = customerRate > 0 ? Math.Round(profit / customerRate * 100m, 2) : 0m;
